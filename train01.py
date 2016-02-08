@@ -62,8 +62,16 @@ assert len(ARGV) == 1, "usage: " + os.path.basename(sys.argv[0]) + " modelFile.p
 execfile(ARGV[0])
 #----------
 
-import pylab
-pylab.close('all')
+havePylab = False
+
+try:
+    import pylab
+    havePylab = True
+except ImportError:
+    pass
+
+if havePylab:
+    pylab.close('all')
 
 print "loading data"
 
@@ -162,7 +170,8 @@ def makePlots():
     print "saved plots to",outputDir
     
 #--------------------
-    
-makePlots()
-pylab.show()
+
+if havePylab:    
+    makePlots()
+    pylab.show()
     
