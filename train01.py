@@ -78,9 +78,25 @@ print "loading data"
 trainData = np.load("gjet-20-40-train.npz")
 testData = np.load("gjet-20-40-test.npz")
 
+# convert labels from -1..+1 to 0..1 for cross-entropy loss
+# must clone to assign
+
+def cloneFunc(data):
+    return dict( [( key, np.copy(value) ) for key, value in data.items() ])
+
+    ### retval = {}
+    ### for key, value in data.items():
+    ###     retval[key] = np.
+
+trainData = cloneFunc(trainData); testData = cloneFunc(testData)
+trainData['labels'] = 0.5 * (trainData['labels'] + 1)
+testData['labels'] = 0.5 * (testData['labels'] + 1)
+
+
 # TODO: normalize these to same weight for positive and negative samples
 trainWeights = np.ones(trainData['labels'].shape)
 testWeights  = np.ones(testData['labels'].shape)
+
 
 print "building model"
 model = makeModel((1, 7, 23))

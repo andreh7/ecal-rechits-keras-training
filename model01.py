@@ -63,7 +63,8 @@ def makeModel(input_shape):
     model.add(Dense(1))
     
     # nn.Tanh
-    model.add(Activation('tanh'))
+    # model.add(Activation('tanh'))    # output range -1..1
+    model.add(Activation('sigmoid')) # output range 0..1
 
     return model
 #----------------------------------------------------------------------
