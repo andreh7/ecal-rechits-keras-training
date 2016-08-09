@@ -7,6 +7,8 @@
 def makeModel(input_shape):
     model = Sequential()
 
+    print "input_shape=",input_shape
+
     # input shape: (1 color) x (7 x 23) images
     # nn.SpatialConvolutionMM(1 -> 64, 5x5, 1,1, 2,2)
     model.add(Convolution2D(64,
@@ -23,7 +25,7 @@ def makeModel(input_shape):
     model.add(MaxPooling2D(pool_size=(2, 2),
                            strides = (1,1), border_mode = 'same'))
     
-    # input shape: 64 x 4 x 12
+    # input shape: 64 x 4 x 12 ( = 3072 elements)
     # nn.SpatialConvolutionMM(64 -> 64, 5x5, 1,1, 2,2)
     #
     # this somehow works in Torch but keras complains that the convolution
@@ -43,7 +45,7 @@ def makeModel(input_shape):
     # nn.SpatialMaxPooling(2,2,2,2,0.5,0.5)
     model.add(MaxPooling2D(pool_size=(2, 2), strides = (2,2), border_mode = 'same'))
 
-    # input shape: 64 x 2 x 6
+    # input shape: 64 x 2 x 6 ( = 768 elements)
     # nn.View
     model.add(Flatten())
 
