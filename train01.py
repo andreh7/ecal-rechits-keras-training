@@ -24,11 +24,14 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint, Callback
 
 from ROCModelCheckpoint import ROCModelCheckpoint
 
+sys.path.append(os.path.expanduser("~/torchio")); import torchio
+
+
 #----------------------------------------------------------------------
 
 # only use e.g. every 10'th element
-strideSize = 40
-    
+strideSize = 40    
+strideSize = 1
 
 outputDir = "plots-" + time.strftime("%Y-%m-%d-%H%M")
 
@@ -52,14 +55,50 @@ class LossHistory(Callback):
 
 
 #----------------------------------------------------------------------
+
+def loadDataTorch(dataDesc):
+    # returns trainData, testData
+
+    assert dataDesc['inputDataIsSparse'], "non-sparse input data is currently not supported"
+
+    retval = []
+    
+    for filesKey, sizeKey in (
+        ('train_files', 'trsize'),
+        ('test_files', 'tesize'):
+
+        # get the number of events to be read from each file
+        thisSize = dataDesc.get(sizeKey, None)
+        
+        for fname in dataDesc[filesKey]:
+            print "opening",fname
+            thisData = torchio.read(fname)
+
+            # typical structure:
+            # {'y': <torchio.torch.FloatTensor instance at 0x7f05052000e0>, 
+            #  'X': {
+            #        'y': <torchio.torch.IntTensor instance at 0x7f05054abcf8>, 
+            #        'x': <torchio.torch.IntTensor instance at 0x7f05054abb90>, 
+            #        'energy': <torchio.torch.FloatTensor instance at 0x7f05054ab998>, 
+            #        'firstIndex': <torchio.torch.IntTensor instance at 0x7f05054abe60>, 
+            #        'numRecHits': <torchio.torch.IntTensor instance at 0x7f05054ab878>}, 
+            # 'mvaid': <torchio.torch.FloatTensor instance at 0x7f0505200200>, 
+            # 'weight': <torchio.torch.FloatTensor instance at 0x7f05054abfc8>}
+        
+
+    return retval
+
+
+#----------------------------------------------------------------------
 # main
 #----------------------------------------------------------------------
 
 ARGV = sys.argv[1:]
 
-assert len(ARGV) == 1, "usage: " + os.path.basename(sys.argv[0]) + " modelFile.py"
+assert len(ARGV) == 2, "usage: " + os.path.basename(sys.argv[0]) + " modelFile.py dataFile.py"
 
 execfile(ARGV[0])
+execfile(ARGV[1])
 #----------
 
 havePylab = False
@@ -75,8 +114,7 @@ if havePylab:
 
 print "loading data"
 
-trainData = np.load("gjet-20-40-train.npz")
-testData = np.load("gjet-20-40-test.npz")
+trainData, testData = loadDataTorch(dataDesc)
 
 # convert labels from -1..+1 to 0..1 for cross-entropy loss
 # must clone to assign
@@ -99,8 +137,9 @@ testWeights  = np.ones(testData['labels'].shape)
 
 
 print "building model"
-model = makeModel((1, 7, 23))
-
+model = makeModel((dataDesc['nfeats'],
+                   dataDesc['width'],
+                   dataDesc['height']))
 
 # see e.g. https://github.com/ml-slac/deep-jets/blob/master/training/conv-train.py#L81
 
