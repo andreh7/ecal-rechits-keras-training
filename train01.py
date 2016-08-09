@@ -65,7 +65,7 @@ def loadDataTorch(dataDesc):
     
     for filesKey, sizeKey in (
         ('train_files', 'trsize'),
-        ('test_files', 'tesize'):
+        ('test_files', 'tesize')):
 
         # get the number of events to be read from each file
         thisSize = dataDesc.get(sizeKey, None)
