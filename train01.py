@@ -135,6 +135,8 @@ testWeights  = np.ones(testData['labels'].shape)
 print "building model"
 model = makeModel()
 
+model.add(Activation('sigmoid'))
+
 # see e.g. https://github.com/ml-slac/deep-jets/blob/master/training/conv-train.py#L81
 
 ### model.compile(loss='binary_crossentropy', optimizer='adam', class_mode='binary')
