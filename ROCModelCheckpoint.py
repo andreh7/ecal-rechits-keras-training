@@ -9,6 +9,7 @@ class ROCModelCheckpoint(Callback):
 
     #----------------------------------------
     def __init__(self, filepath, X, y, weights, verbose=True):
+        # filepath can be None (e.g. if no h5py is available)
 
         super(Callback, self).__init__()
 
