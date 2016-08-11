@@ -176,12 +176,8 @@ try:
             sample_weight = trainWeights,
             # sample_weight=np.power(weights, 0.7))
             
-            batch_size = 3*32,
-            # nb_epoch = 20,
-
-            # DEBUG
-            nb_epoch = 2,
-
+            batch_size = 32,
+            nb_epoch = 1000,
 
             show_accuracy = True, 
 
