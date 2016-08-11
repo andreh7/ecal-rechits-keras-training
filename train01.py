@@ -137,6 +137,8 @@ model = makeModel()
 
 model.add(Activation('sigmoid'))
 
+print model.summary()
+
 # see e.g. https://github.com/ml-slac/deep-jets/blob/master/training/conv-train.py#L81
 
 ### model.compile(loss='binary_crossentropy', optimizer='adam', class_mode='binary')
