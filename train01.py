@@ -214,7 +214,3 @@ def makePlots():
     
 #--------------------
 
-if havePylab:    
-    makePlots()
-    pylab.show()
-    
