@@ -125,8 +125,6 @@ def cloneFunc(data):
     ###     retval[key] = np.
 
 trainData = cloneFunc(trainData); testData = cloneFunc(testData)
-trainData['labels'] = 0.5 * (trainData['labels'] + 1)
-testData['labels'] = 0.5 * (testData['labels'] + 1)
 
 
 # TODO: normalize these to same weight for positive and negative samples
