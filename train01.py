@@ -172,8 +172,8 @@ history = None
     
 try:
 	history = model.fit(
-            trainData['input'][::strideSize], trainData['labels'][::strideSize],
-            sample_weight = trainWeights[::strideSize],
+            trainData['input'], trainData['labels'],
+            sample_weight = trainWeights,
             # sample_weight=np.power(weights, 0.7))
             
             batch_size = 3*32,
@@ -187,7 +187,7 @@ try:
 
             shuffle = True, # shuffle at each epoch (but this is the default)
             
-            validation_data = (testData['input'][::strideSize], testData['labels'][::strideSize]),
+            validation_data = (testData['input'], testData['labels']),
             callbacks = callbacks,
             )
 
