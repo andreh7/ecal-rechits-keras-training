@@ -156,13 +156,7 @@ trainLossHistory = LossHistory()
 
 testAuc = ROCModelCheckpoint('./roc.h5', testData['input'], testData['labels'], testWeights, verbose=True)
 
-# see https://github.com/fchollet/keras/blob/d2f7593a35c4d2df8d8b4f434f20097448595cb0/keras/callbacks.py#L220
-# for definition of ModelCheckpoint
-valLoss = ModelCheckpoint('./logloss.h5', monitor = 'val_loss', verbose = True, save_best_only = True)
-
 callbacks = [
-            EarlyStopping(verbose=True, patience=10, monitor='val_loss'),
-            valLoss,
             testAuc,
             trainLossHistory,
             ]
