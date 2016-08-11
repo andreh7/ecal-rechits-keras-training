@@ -29,10 +29,6 @@ sys.path.append(os.path.expanduser("~/torchio")); import torchio
 
 #----------------------------------------------------------------------
 
-# only use e.g. every 10'th element
-strideSize = 40    
-strideSize = 1
-
 outputDir = "plots-" + time.strftime("%Y-%m-%d-%H%M")
 
 
@@ -156,7 +152,7 @@ print 'starting training at', time.asctime()
 
 trainLossHistory = LossHistory()
 
-testAuc = ROCModelCheckpoint('./roc.h5', testData['input'][::strideSize], testData['labels'][::strideSize], testWeights[::strideSize], verbose=True)
+testAuc = ROCModelCheckpoint('./roc.h5', testData['input'], testData['labels'], testWeights, verbose=True)
 
 # see https://github.com/fchollet/keras/blob/d2f7593a35c4d2df8d8b4f434f20097448595cb0/keras/callbacks.py#L220
 # for definition of ModelCheckpoint
