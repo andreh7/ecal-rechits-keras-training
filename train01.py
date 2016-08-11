@@ -52,7 +52,7 @@ class LossHistory(Callback):
 
 #----------------------------------------------------------------------
 
-def loadDataTorch(dataDesc):
+def datasetLoadFunction(dataDesc, size, cuda):
     # returns trainData, testData
 
     assert dataDesc['inputDataIsSparse'], "non-sparse input data is currently not supported"
@@ -110,7 +110,9 @@ if havePylab:
 
 print "loading data"
 
-trainData, testData = loadDataTorch(dataDesc)
+cuda = True
+trainData, trsize = datasetLoadFunction(dataDesc['train_files'], dataDesc['trsize'], cuda)
+testData,  tesize = datasetLoadFunction(dataDesc['test_files'], dataDesc['tesize'], cuda)
 
 # convert labels from -1..+1 to 0..1 for cross-entropy loss
 # must clone to assign
