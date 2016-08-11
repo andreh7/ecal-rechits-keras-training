@@ -133,9 +133,7 @@ testWeights  = np.ones(testData['labels'].shape)
 
 
 print "building model"
-model = makeModel((dataDesc['nfeats'],
-                   dataDesc['width'],
-                   dataDesc['height']))
+model = makeModel()
 
 # see e.g. https://github.com/ml-slac/deep-jets/blob/master/training/conv-train.py#L81
 
