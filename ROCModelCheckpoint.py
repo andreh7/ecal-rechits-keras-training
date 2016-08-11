@@ -25,10 +25,12 @@ class ROCModelCheckpoint(Callback):
         
     def on_epoch_end(self, epoch, logs={}):
 
-        
-        auc = roc_auc_score(self.y, # labels
-                            self.model.predict(self.X, verbose = True).ravel(), # predictions
-                            sample_weight = self.weights
+
+        predictions = self.model.predict(self.X, verbose = True).ravel()
+        auc = roc_auc_score(self.y.ravel(), # labels
+                            predictions,
+                            sample_weight = self.weights,
+                            average = None,
                             )
 
         print "test AUC=%.3f" % auc
