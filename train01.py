@@ -184,7 +184,7 @@ try:
             batch_size = 32,
             nb_epoch = 1000,
 
-            show_accuracy = True, 
+            # show_accuracy = True, 
 
             shuffle = True, # shuffle at each epoch (but this is the default)
             
