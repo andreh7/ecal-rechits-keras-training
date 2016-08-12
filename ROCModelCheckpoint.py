@@ -8,7 +8,7 @@ from sklearn.metrics import roc_curve, auc, roc_auc_score
 class ROCModelCheckpoint(Callback):
 
     #----------------------------------------
-    def __init__(self, filepath, X, y, weights, verbose=True):
+    def __init__(self, sampleLabel, X, y, weights, verbose=True):
         # filepath can be None (e.g. if no h5py is available)
 
         super(Callback, self).__init__()
@@ -16,7 +16,7 @@ class ROCModelCheckpoint(Callback):
         self.X, self.y, self.weights = X, y, weights
 
         self.verbose = verbose
-        self.filepath = filepath
+        self.sampleLabel = sampleLabel
         self.best = 0.0
 
         self.aucs = []
@@ -33,7 +33,8 @@ class ROCModelCheckpoint(Callback):
                             average = None,
                             )
 
-        print "test AUC=%.3f" % auc
+        print
+        print "%s AUC: %.3f" % (self.sampleLabel, auc)
         self.aucs.append(auc)
         
 
