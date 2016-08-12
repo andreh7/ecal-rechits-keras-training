@@ -147,7 +147,7 @@ model.compile(loss='binary_crossentropy',
 
               optimizer = 'adam',
 
-              class_mode='binary')
+              )
 
 
 print 'starting training at', time.asctime()
