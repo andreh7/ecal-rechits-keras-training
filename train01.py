@@ -52,6 +52,16 @@ class LossHistory(Callback):
 
 #----------------------------------------------------------------------
 
+class EpochStartBanner(Callback):
+    # prints a banner when a new training epoch is started
+
+    def on_epoch_begin(self, epoch, logs={}):
+        print "----------------------------------------"
+        print "starting epoch %d at" % (epoch + 1), time.strftime("%Y-%m-%d %H:%M:%S")
+        print "----------------------------------------"
+
+#----------------------------------------------------------------------
+
 def datasetLoadFunction(dataDesc, size, cuda):
     # returns trainData, testData
 
@@ -157,6 +167,7 @@ trainLossHistory = LossHistory()
 testAuc = ROCModelCheckpoint('./roc.h5', testData['input'], testData['labels'], testWeights, verbose=True)
 
 callbacks = [
+            EpochStartBanner(),
             testAuc,
             trainLossHistory,
             ]
