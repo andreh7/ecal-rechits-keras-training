@@ -29,7 +29,7 @@ sys.path.append(os.path.expanduser("~/torchio")); import torchio
 
 #----------------------------------------------------------------------
 
-outputDir = "plots-" + time.strftime("%Y-%m-%d-%H%M")
+outputDir = "results-" + time.strftime("%Y-%m-%d-%H%M")
 
 
 #----------------------------------------------------------------------
