@@ -195,7 +195,8 @@ try:
         )
 
 except KeyboardInterrupt:
-	print 'interrupted'
+    print
+    print 'interrupted'
 
 #--------------------
     
