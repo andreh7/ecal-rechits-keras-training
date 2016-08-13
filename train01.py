@@ -148,6 +148,9 @@ model = makeModel()
 model.add(Activation('sigmoid'))
 
 #----------
+if not os.path.exists(outputDir):
+    os.makedirs(outputDir)
+
 logfile = open(os.path.join(outputDir, "train.log"), "w")
 
 #----------
@@ -218,9 +221,6 @@ except KeyboardInterrupt:
 #--------------------
     
 def makePlots():
-
-    if not os.path.exists(outputDir):
-        os.makedirs(outputDir)
     
     import pylab
 
