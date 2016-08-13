@@ -147,7 +147,24 @@ model = makeModel()
 
 model.add(Activation('sigmoid'))
 
+#----------
+logfile = open(os.path.join(outputDir, "train.log"), "w")
+
+#----------
+
+print "----------"
+print "model:"
 print model.summary()
+print "----------"
+print "the model has",model.count_params(),"parameters"
+
+print >> logfile,"----------"
+print >> logfile,"model:"
+print >> logfile, model.summary()
+print >> logfile,"----------"
+print >> logfile, "the model has",model.count_params(),"parameters"
+
+
 
 # see e.g. https://github.com/ml-slac/deep-jets/blob/master/training/conv-train.py#L81
 
