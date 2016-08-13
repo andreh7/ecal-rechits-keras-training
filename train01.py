@@ -178,21 +178,21 @@ callbacks = [
 history = None
     
 try:
-	history = model.fit(
-            trainData['input'], trainData['labels'],
-            sample_weight = trainWeights,
-            # sample_weight=np.power(weights, 0.7))
-            
-            batch_size = 32,
-            nb_epoch = 1000,
-
-            # show_accuracy = True, 
-
-            shuffle = True, # shuffle at each epoch (but this is the default)
-            
-            validation_data = (testData['input'], testData['labels']),
-            callbacks = callbacks,
-            )
+    history = model.fit(
+        trainData['input'], trainData['labels'],
+        sample_weight = trainWeights,
+        # sample_weight=np.power(weights, 0.7))
+        
+        batch_size = 32,
+        nb_epoch = 1000,
+        
+        # show_accuracy = True, 
+        
+        shuffle = True, # shuffle at each epoch (but this is the default)
+        
+        validation_data = (testData['input'], testData['labels']),
+        callbacks = callbacks,
+        )
 
 except KeyboardInterrupt:
 	print 'interrupted'
