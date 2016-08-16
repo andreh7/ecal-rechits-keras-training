@@ -181,8 +181,8 @@ trainData = cloneFunc(trainData); testData = cloneFunc(testData)
 
 
 # TODO: normalize these to same weight for positive and negative samples
-trainWeights = np.ones(trainData['labels'].shape)
-testWeights  = np.ones(testData['labels'].shape)
+trainWeights = trainData['weights']
+testWeights  = testData['weights']
 
 
 print "building model"
