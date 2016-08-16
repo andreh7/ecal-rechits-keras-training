@@ -164,10 +164,10 @@ print "the model has",model.count_params(),"parameters"
 
 print >> logfile,"----------"
 print >> logfile,"model:"
-print >> logfile, model.summary()
+model.summary(file = logfile)
 print >> logfile,"----------"
 print >> logfile, "the model has",model.count_params(),"parameters"
-
+logfile.flush()
 
 
 # see e.g. https://github.com/ml-slac/deep-jets/blob/master/training/conv-train.py#L81
