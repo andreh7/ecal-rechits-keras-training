@@ -199,8 +199,8 @@ print 'starting training at', time.asctime()
 
 trainLossHistory = LossHistory()
 
-trainAuc = ROCModelCheckpoint('train', trainData['input'], trainData['labels'], trainWeights, verbose=True)
-testAuc  = ROCModelCheckpoint('test',  testData['input'],  testData['labels'],  testWeights,  verbose=True)
+trainAuc = ROCModelCheckpoint('train', trainData['input'], trainData['labels'], trainWeights, verbose=True, logFile = logfile)
+testAuc  = ROCModelCheckpoint('test',  testData['input'],  testData['labels'],  testWeights,  verbose=True, logFile = logfile)
 
 callbacks = [
             EpochStartBanner(logfile),

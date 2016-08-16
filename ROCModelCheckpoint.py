@@ -4,14 +4,17 @@
 
 from keras.callbacks import Callback
 from sklearn.metrics import roc_curve, auc, roc_auc_score
+import sys
 
 class ROCModelCheckpoint(Callback):
 
     #----------------------------------------
-    def __init__(self, sampleLabel, X, y, weights, verbose=True):
+    def __init__(self, sampleLabel, X, y, weights, verbose=True, logFile = None):
         # filepath can be None (e.g. if no h5py is available)
 
         super(Callback, self).__init__()
+
+        self.logFile = logFile
 
         self.X, self.y, self.weights = X, y, weights
 
@@ -20,6 +23,10 @@ class ROCModelCheckpoint(Callback):
         self.best = 0.0
 
         self.aucs = []
+
+        self.fouts = [ sys.stdout ]
+        if logFile != None:
+            self.fouts.append(logFile)
         
     #----------------------------------------
         
@@ -33,10 +40,12 @@ class ROCModelCheckpoint(Callback):
                             average = None,
                             )
 
-        print
-        print "%s AUC: %.3f" % (self.sampleLabel, auc)
         self.aucs.append(auc)
-        
+
+        for fout in self.fouts:
+            print >> fout
+            print >> fout, "%s AUC: %f" % (self.sampleLabel, auc)
+            fout.flush()
 
         ### fpr, tpr, _ = roc_curve(self.y, self.model.predict(self.X, verbose=True).ravel(), sample_weight=self.weights)
         ### select = (tpr > 0.1) & (tpr < 0.9)
