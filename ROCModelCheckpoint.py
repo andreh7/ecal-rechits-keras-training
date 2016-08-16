@@ -37,7 +37,7 @@ class ROCModelCheckpoint(Callback):
         deltaT = time.time() - start
 
         for fout in self.fouts:
-            print >> fout, "time for entire test batch: %.2f min" % (deltaT / 60.0)
+            print >> fout, "time to evaluate entire",self.sampleLabel,"batch: %.2f min" % (deltaT / 60.0)
 
         auc = roc_auc_score(self.y.ravel(), # labels
                             predictions,
