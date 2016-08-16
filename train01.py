@@ -77,6 +77,34 @@ class EpochStartBanner(Callback):
 
 #----------------------------------------------------------------------
 
+class TrainingTimeMeasurement(Callback):
+    # use this as first callback (assuming no other callbacks do a significant
+    # amount of computation before the start of the batch)
+
+    def __init__(self, numTrainingSamples, logfile = None):
+        super(Callback, self).__init__()
+
+        self.numTrainingSamples = numTrainingSamples
+
+        self.fouts = [ sys.stdout ]
+        if logfile != None:
+            self.fouts.append(logfile)
+
+
+    def on_epoch_begin(self, epoch, logs={}):
+        self.epochStartTime = time.time()
+
+    def on_epoch_end(self, epoch, logs={}):
+        deltaT = time.time() - self.epochStartTime
+
+        for fout in self.fouts:
+            # TODO: need to know number of training samples
+            print >> fout, "time to learn 1 sample: %.3f ms" % ( deltaT / self.numTrainingSamples * 1000.0)
+            print >> fout, "time to train entire batch: %.2f min" % (deltaT / 60.0)
+            fout.flush()
+
+#----------------------------------------------------------------------
+
 def datasetLoadFunction(dataDesc, size, cuda):
     # returns trainData, testData
 
@@ -203,6 +231,7 @@ trainAuc = ROCModelCheckpoint('train', trainData['input'], trainData['labels'], 
 testAuc  = ROCModelCheckpoint('test',  testData['input'],  testData['labels'],  testWeights,  verbose=True, logFile = logfile)
 
 callbacks = [
+            TrainingTimeMeasurement(len(trainData['labels']), logfile),
             EpochStartBanner(logfile),
             trainAuc,
             testAuc,
