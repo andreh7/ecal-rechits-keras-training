@@ -4,7 +4,7 @@
 
 from keras.callbacks import Callback
 from sklearn.metrics import roc_curve, auc, roc_auc_score
-import sys
+import sys, time
 
 class ROCModelCheckpoint(Callback):
 
@@ -32,8 +32,13 @@ class ROCModelCheckpoint(Callback):
         
     def on_epoch_end(self, epoch, logs={}):
 
-
+        start = time.time()
         predictions = self.model.predict(self.X, verbose = True).ravel()
+        deltaT = time.time() - start
+
+        for fout in self.fouts:
+            print >> fout, "time for entire test batch: %.2f min" % (deltaT / 60.0)
+
         auc = roc_auc_score(self.y.ravel(), # labels
                             predictions,
                             sample_weight = self.weights,
