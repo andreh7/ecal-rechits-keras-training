@@ -16,6 +16,7 @@ import os, sys
 #
 # edit the 'backend' parameter in ~/.keras/keras.json
 
+sys.path.insert(0, os.path.expanduser("~/keras"))
 from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Activation, Flatten
 from keras.layers.convolutional import Convolution2D, MaxPooling2D
