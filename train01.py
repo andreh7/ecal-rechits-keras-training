@@ -184,7 +184,7 @@ trainData = cloneFunc(trainData); testData = cloneFunc(testData)
 trainWeights = trainData['weights']
 testWeights  = testData['weights']
 
-
+#----------
 print "building model"
 model = makeModel()
 
@@ -195,6 +195,18 @@ if not os.path.exists(outputDir):
     os.makedirs(outputDir)
 
 logfile = open(os.path.join(outputDir, "train.log"), "w")
+
+#----------
+# write out BDT/MVA id labels (for performance comparison)
+#----------
+for name, weights, label, output in (
+    ('train', trainWeights, trainData['labels'], trainData['mvaid']),
+    ('test',  testWeights,  testData['labels'],  testData['mvaid']),
+    ):
+    np.savez(os.path.join(outputDir, "roc-data-%s-mva.npz" % name),
+             weight = weights,
+             output = output,
+             label = label)
 
 #----------
 
