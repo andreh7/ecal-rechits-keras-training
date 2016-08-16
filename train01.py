@@ -56,10 +56,24 @@ class LossHistory(Callback):
 class EpochStartBanner(Callback):
     # prints a banner when a new training epoch is started
 
+    def __init__(self, logfile = None):
+        self.logfile = logfile
+
     def on_epoch_begin(self, epoch, logs={}):
-        print "----------------------------------------"
-        print "starting epoch %d at" % (epoch + 1), time.strftime("%Y-%m-%d %H:%M:%S")
-        print "----------------------------------------"
+        
+        fouts = [ sys.stdout ]
+        if self.logfile != None:
+            fouts.append(self.logfile)
+
+        nowStr = time.strftime("%Y-%m-%d %H:%M:%S")
+        
+        for fout in fouts:
+
+            print >> fout, "----------------------------------------"
+            print >> fout, "starting epoch %d at" % (epoch + 1), nowStr
+            print >> fout, "----------------------------------------"
+
+            fout.flush()
 
 #----------------------------------------------------------------------
 
@@ -189,7 +203,7 @@ trainAuc = ROCModelCheckpoint('train', trainData['input'], trainData['labels'], 
 testAuc  = ROCModelCheckpoint('test',  testData['input'],  testData['labels'],  testWeights,  verbose=True)
 
 callbacks = [
-            EpochStartBanner(),
+            EpochStartBanner(logfile),
             trainAuc,
             testAuc,
             trainLossHistory,
