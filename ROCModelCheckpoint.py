@@ -6,10 +6,13 @@ from keras.callbacks import Callback
 from sklearn.metrics import roc_curve, auc, roc_auc_score
 import sys, time
 
+import numpy as np
+import os
+
 class ROCModelCheckpoint(Callback):
 
     #----------------------------------------
-    def __init__(self, sampleLabel, X, y, weights, verbose=True, logFile = None):
+    def __init__(self, outputDir, sampleLabel, X, y, weights, verbose=True, logFile = None):
         # filepath can be None (e.g. if no h5py is available)
 
         super(Callback, self).__init__()
@@ -28,6 +31,8 @@ class ROCModelCheckpoint(Callback):
         if logFile != None:
             self.fouts.append(logFile)
         
+        self.outputDir = outputDir
+
     #----------------------------------------
         
     def on_epoch_end(self, epoch, logs={}):
@@ -38,6 +43,10 @@ class ROCModelCheckpoint(Callback):
 
         for fout in self.fouts:
             print >> fout, "time to evaluate entire",self.sampleLabel,"batch: %.2f min" % (deltaT / 60.0)
+
+        #----------
+        # calculate AUC
+        #----------
 
         auc = roc_auc_score(self.y.ravel(), # labels
                             predictions,
@@ -51,6 +60,16 @@ class ROCModelCheckpoint(Callback):
             print >> fout
             print >> fout, "%s AUC: %f" % (self.sampleLabel, auc)
             fout.flush()
+
+        #----------
+        # write predictions out
+        #----------
+        outputFname = os.path.join(self.outputDir, "roc-data-" + self.sampleLabel + "-%04d.npz" % (epoch + 1))
+        np.savez(outputFname, 
+                 weight = self.weights,
+                 output = predictions,
+                 label  = self.y
+                 )
 
         ### fpr, tpr, _ = roc_curve(self.y, self.model.predict(self.X, verbose=True).ravel(), sample_weight=self.weights)
         ### select = (tpr > 0.1) & (tpr < 0.9)

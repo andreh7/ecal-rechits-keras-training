@@ -227,8 +227,8 @@ print 'starting training at', time.asctime()
 
 trainLossHistory = LossHistory()
 
-trainAuc = ROCModelCheckpoint('train', trainData['input'], trainData['labels'], trainWeights, verbose=True, logFile = logfile)
-testAuc  = ROCModelCheckpoint('test',  testData['input'],  testData['labels'],  testWeights,  verbose=True, logFile = logfile)
+trainAuc = ROCModelCheckpoint(outputDir, 'train', trainData['input'], trainData['labels'], trainWeights, verbose=True, logFile = logfile)
+testAuc  = ROCModelCheckpoint(outputDir, 'test',  testData['input'],  testData['labels'],  testWeights,  verbose=True, logFile = logfile)
 
 callbacks = [
             TrainingTimeMeasurement(len(trainData['labels']), logfile),
