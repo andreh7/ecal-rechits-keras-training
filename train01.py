@@ -59,15 +59,15 @@ class EpochStartBanner(Callback):
     def __init__(self, logfile = None):
         self.logfile = logfile
 
+        self.fouts = [ sys.stdout ]
+        if self.logfile != None:
+            self.fouts.append(self.logfile)
+
     def on_epoch_begin(self, epoch, logs={}):
         
-        fouts = [ sys.stdout ]
-        if self.logfile != None:
-            fouts.append(self.logfile)
-
         nowStr = time.strftime("%Y-%m-%d %H:%M:%S")
         
-        for fout in fouts:
+        for fout in self.fouts:
 
             print >> fout, "----------------------------------------"
             print >> fout, "starting epoch %d at" % (epoch + 1), nowStr
