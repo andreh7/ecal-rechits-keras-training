@@ -10,7 +10,7 @@ import numpy as np
 ninputs = 13
 
 
-def makeModel():
+def makeModelHelper(numHiddenLayers, nodesPerHiddenLayer):
 
     # 2-class problem
     noutputs = 1
@@ -33,11 +33,6 @@ def makeModel():
     #       pfChgIso03worst : FloatTensor - size: 1299819
     #     }
     
-
-    nodesPerHiddenLayer = 100
-
-    numHiddenLayers = 10
-
     # size of minibatch
     batchSize = 32
 
@@ -71,6 +66,14 @@ def makeModel():
     # end of loop over hidden layers
 
     return model
+
+#----------------------------------------------------------------------
+
+def makeModel():
+    return makeModelHelper(
+        numHiddenLayers = 3,
+        nodesPerHiddenLayer = ninputs * 2
+        )
 
 #----------------------------------------------------------------------
 # function to prepare input data samples
