@@ -1,4 +1,4 @@
-#!/usr/bin/env th
+#!/usr/bin/env python
 
 from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Activation, Flatten
