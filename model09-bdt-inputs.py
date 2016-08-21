@@ -7,7 +7,12 @@ import numpy as np
 
 #----------------------------------------------------------------------
 
-ninputs = 13
+isBarrel = True
+
+if isBarrel:
+    ninputs = 12
+else:
+    ninputs = 13
 
 
 def makeModelHelper(numHiddenLayers, nodesPerHiddenLayer):
