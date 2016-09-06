@@ -56,8 +56,9 @@ class LossHistory(Callback):
 class EpochStartBanner(Callback):
     # prints a banner when a new training epoch is started
 
-    def __init__(self, logfile = None):
-        self.logfile = logfile
+    def __init__(self, outputDir, logfile = None):
+
+        self.outputDir = outputDir
 
         self.fouts = [ sys.stdout ]
         if self.logfile != None:
@@ -72,6 +73,8 @@ class EpochStartBanner(Callback):
             print >> fout, "----------------------------------------"
             print >> fout, "starting epoch %d at" % (epoch + 1), nowStr
             print >> fout, "----------------------------------------"
+            print >> fout, "output directory is",self.outputDir
+
 
             fout.flush()
 
@@ -237,14 +240,14 @@ model.compile(loss='binary_crossentropy',
 
 print 'starting training at', time.asctime()
 
-trainLossHistory = LossHistory()
+trainLossHistory = LossHistory(logfile)
 
 trainAuc = ROCModelCheckpoint(outputDir, 'train', trainData['input'], trainData['labels'], trainWeights, verbose=True, logFile = logfile)
 testAuc  = ROCModelCheckpoint(outputDir, 'test',  testData['input'],  testData['labels'],  testWeights,  verbose=True, logFile = logfile)
 
 callbacks = [
             TrainingTimeMeasurement(len(trainData['labels']), logfile),
-            EpochStartBanner(logfile),
+            EpochStartBanner(outputDir, logfile),
             trainAuc,
             testAuc,
             trainLossHistory,
