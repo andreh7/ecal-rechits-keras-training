@@ -61,8 +61,8 @@ class EpochStartBanner(Callback):
         self.outputDir = outputDir
 
         self.fouts = [ sys.stdout ]
-        if self.logfile != None:
-            self.fouts.append(self.logfile)
+        if logfile != None:
+            self.fouts.append(logfile)
 
     def on_epoch_begin(self, epoch, logs={}):
         
