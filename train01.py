@@ -38,6 +38,12 @@ outputDir = "results/" + time.strftime("%Y-%m-%d-%H%M%S")
 
 class LossHistory(Callback):
 
+    def __init__(self, logfile = None):
+
+        self.fouts = [ sys.stdout ]
+        if logfile != None:
+            self.fouts.append(logfile)
+
     #----------------------------------------
     def on_train_begin(self, logs={}):
         self.losses = []
@@ -47,8 +53,16 @@ class LossHistory(Callback):
     def on_batch_end(self, batch, logs={}):
         # logs has the following keys:
         #   'acc', 'loss', 'batch', 'size'
-
-        self.losses.append(logs.get('loss'))
+        
+        loss = logs.get('loss')
+        self.losses.append(loss)
+        
+    def on_epoch_end(self, epoch, logs={}):
+        loss = np.mean(self.losses)
+        
+        for fout in self.fouts:
+            print >> fout,"mean loss=",loss
+            fout.flush()
 
 
 #----------------------------------------------------------------------
