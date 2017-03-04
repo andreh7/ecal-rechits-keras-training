@@ -9,11 +9,32 @@ import numpy as np
 
 isBarrel = True
 
-if isBarrel:
-    ninputs = 12
+if globals().has_key('selectedVariables'):
+    ninputs = len(selectedVariables)
 else:
-    ninputs = 13
+    if isBarrel:
+        ninputs = 12
+    else:
+        ninputs = 13
 
+# set to None to disable the dropout layer
+dropOutProb = 0.5
+
+# default parameters
+numHiddenLayers = 3
+nodesPerHiddenLayer = ninputs * 2
+
+# put a dropout layer after each layer, not only at the end
+dropOutPerLayer = False
+
+nonlinearity = rectify
+
+#----------------------------------------
+modelParams = dict(
+    # maxGradientNorm = 3.3, # typically 0.99 percentile of the gradient norm before diverging
+    )
+
+#----------------------------------------
 
 def makeModelHelper(numHiddenLayers, nodesPerHiddenLayer):
 
@@ -76,8 +97,8 @@ def makeModelHelper(numHiddenLayers, nodesPerHiddenLayer):
 
 def makeModel():
     return makeModelHelper(
-        numHiddenLayers = 3,
-        nodesPerHiddenLayer = ninputs * 2
+        numHiddenLayers = numHiddenLayers,
+        nodesPerHiddenLayer = nodesPerHiddenLayer
         )
 
 #----------------------------------------------------------------------
