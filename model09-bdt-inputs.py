@@ -2,6 +2,8 @@
 
 from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Activation, Flatten
+# in future versions
+# from keras.layers.advanced_activations import PRelU
 
 import numpy as np
 
@@ -27,7 +29,7 @@ nodesPerHiddenLayer = ninputs * 2
 # put a dropout layer after each layer, not only at the end
 dropOutPerLayer = False
 
-nonlinearity = rectify
+nonlinearity = Activation('relu')
 
 #----------------------------------------
 modelParams = dict(
@@ -71,24 +73,46 @@ def makeModelHelper(numHiddenLayers, nodesPerHiddenLayer):
 
     for i in range(numHiddenLayers):
 
+        isLastLayer = i == numHiddenLayers - 1
+
+        #----------
+        # special treatment needed for first layer
+        #----------
         if i == 0:
-
-            model.add(Dense(nodesPerHiddenLayer, input_dim = ninputs))
-
-        elif i == numHiddenLayers - 1:
-  
-            # add a dropout layer at the end
-            #  model:add(nn.Dropout(0.3))
-            model.add(Dense(noutputs))
-  
+            input_dim = ninputs
         else:
-  
-            model.add(Dense(nodesPerHiddenLayer))
+            # autodetect
+            input_dim = None
 
+        #----------
 
-        if i < numHiddenLayers - 1:
-            model.add(Activation('relu'))
-  
+        if not isLastLayer:
+
+            import copy
+            thisNonlinearity = copy.deepcopy(nonlinearity)
+            num_units = nodesPerHiddenLayer
+
+        else:
+            # sigmoid at output
+            thisNonlinearity = Activation('sigmoid')
+
+            num_units = 1
+
+        # set the name of the activation layer by hand 
+        # (necessary after cloning)
+        thisNonlinearity.name = "activation_%d" % (i + 1)
+
+        if dropOutProb != None:
+            if isLastLayer or dropOutPerLayer and i > 0:
+                # add a dropout layer at the end
+                # or in between (but not at the beginning)
+                model.add(Dropout(dropOutProb))
+
+        # default initialization is glorot_uniform
+        model.add(Dense(num_units, input_dim = input_dim))
+
+        model.add(thisNonlinearity)
+
     # end of loop over hidden layers
 
     return model
@@ -107,22 +131,9 @@ def makeModel():
 
 def makeInput(dataset, rowIndices, inputDataIsSparse):
 
-    assert not inputDataIsSparse, "input data is not expected to be sparse"
+    # assert not inputDataIsSparse, "input data is not expected to be sparse"
   
-    batchSize = len(rowIndices)
-  
-    retval = np.zeros(batchSize, ninputs)
-  
-    #----------
-  
-    for i in range(batchSize):
-  
-        rowIndex = rowIndices[i]
-        retval[i] = dataset.data[rowIndex]
-  
-    # end of loop over minibatch indices
-  
-    return retval
+    return [ dataset['input'][rowIndices] ]
 
 #----------------------------------------------------------------------
 # function makeInputView(inputValues, first, last)
