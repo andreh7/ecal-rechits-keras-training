@@ -280,6 +280,18 @@ for name, weights, label, output in (
              output = output,
              label = label)
 
+# save weights (just once, we assume the ordering of the events is always the same)
+np.savez(os.path.join(outputDir, "weights-labels-train.npz"),
+         trainWeight = trainWeights,
+         origTrainWeights = origTrainWeights,
+         doPtEtaReweighting = doPtEtaReweighting,
+         label = trainData['labels'],
+         )
+np.savez(os.path.join(outputDir, "weights-labels-test.npz"),
+         weight = testWeights,
+         label = testData['labels'],
+         )
+
 #----------
 
 print "----------"

@@ -66,9 +66,7 @@ class ROCModelCheckpoint(Callback):
         #----------
         outputFname = os.path.join(self.outputDir, "roc-data-" + self.sampleLabel + "-%04d.npz" % (epoch + 1))
         np.savez(outputFname, 
-                 weight = self.weights,
-                 output = predictions,
-                 label  = self.y
+                 output = predictions
                  )
 
         ### fpr, tpr, _ = roc_curve(self.y, self.model.predict(self.X, verbose=True).ravel(), sample_weight=self.weights)
