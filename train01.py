@@ -159,12 +159,46 @@ def datasetLoadFunction(dataDesc, size, cuda):
 # main
 #----------------------------------------------------------------------
 
-ARGV = sys.argv[1:]
+# parse command line arguments
+import argparse
 
-assert len(ARGV) == 2, "usage: " + os.path.basename(sys.argv[0]) + " modelFile.py dataFile.py"
+parser = argparse.ArgumentParser(prog='train01.py',
+                                 formatter_class = argparse.ArgumentDefaultsHelpFormatter,
+                                 )
 
-execfile(ARGV[0])
-execfile(ARGV[1])
+
+parser.add_argument('--param',
+                    dest = "params",
+                    default = [],
+                    help='additional python to be evaluated after reading model and dataset file. Can be used to change some parameters. Option can be specified multiple times.',
+                    action = 'append',
+                    )
+
+
+parser.add_argument('modelFile',
+                    metavar = "modelFile.py",
+                    type = str,
+                    nargs = 1,
+                    help='file with model building code',
+                    )
+
+parser.add_argument('dataFile',
+                    metavar = "dataFile.py",
+                    type = str,
+                    nargs = 1,
+                    help='file with data loading code',
+                    )
+
+options = parser.parse_args()
+
+
+execfile(options.modelFile[0])
+execfile(options.dataFile[0])
+
+for param in options.params:
+    # python 2
+    exec param
+
 #----------
 
 havePylab = False
