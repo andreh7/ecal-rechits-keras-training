@@ -205,8 +205,6 @@ testWeights  = testData['weights']
 print "building model"
 model = makeModel()
 
-model.add(Activation('sigmoid'))
-
 #----------
 if not os.path.exists(outputDir):
     os.makedirs(outputDir)
