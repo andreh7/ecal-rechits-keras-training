@@ -214,9 +214,18 @@ if havePylab:
 
 print "loading data"
 
+doPtEtaReweighting = globals().get("doPtEtaReweighting", False)
+
 cuda = True
-trainData, trsize = datasetLoadFunction(dataDesc['train_files'], dataDesc['trsize'], cuda)
-testData,  tesize = datasetLoadFunction(dataDesc['test_files'], dataDesc['tesize'], cuda)
+trainData, trsize = datasetLoadFunction(dataDesc['train_files'], dataDesc['trsize'], 
+                                        cuda = cuda,
+                                        isTraining = True,
+                                        reweightPtEta = doPtEtaReweighting
+                                        )
+
+testData,  tesize = datasetLoadFunction(dataDesc['test_files'], dataDesc['tesize'], cuda,
+                                        isTraining = False,
+                                        reweightPtEta = False)
 
 # convert labels from -1..+1 to 0..1 for cross-entropy loss
 # must clone to assign
@@ -235,6 +244,12 @@ trainData = cloneFunc(trainData); testData = cloneFunc(testData)
 trainWeights = trainData['weights']
 testWeights  = testData['weights']
 
+if doPtEtaReweighting:
+    origTrainWeights = trainData['weightsBeforePtEtaReweighting']
+else:
+    # they're the same
+    origTrainWeights = trainWeights
+
 #----------
 print "building model"
 model = makeModel()
@@ -244,6 +259,14 @@ if not os.path.exists(outputDir):
     os.makedirs(outputDir)
 
 logfile = open(os.path.join(outputDir, "train.log"), "w")
+
+fouts = [ sys.stdout, logfile ]
+
+
+#----------
+
+for fout in fouts:
+    print >> fout, "doPtEtaReweighting=",doPtEtaReweighting
 
 #----------
 # write out BDT/MVA id labels (for performance comparison)

@@ -78,13 +78,7 @@ normalizeBDTvars = True
 
 #----------------------------------------------------------------------
 
-def datasetLoadFunction(fnames, size, cuda, 
-                        # isTraining, 
-                        # reweightPtEta
-                        ):
-
-    isTraining = False
-    reweightPtEta = False
+def datasetLoadFunction(fnames, size, cuda, isTraining, reweightPtEta):
 
     # only apply pt/eta reweighting for training dataset
     reweightPtEta = reweightPtEta and isTraining
